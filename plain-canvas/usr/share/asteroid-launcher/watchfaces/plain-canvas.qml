@@ -31,14 +31,14 @@
 import QtQuick 2.1
 
 Item {
-    property real secondRad : 0
-    property real minuteRad : 0
-    property real hourRad : 0
-    property int balance : 0
+	property real secondRad : 0
+	property real minuteRad : 0
+	property real hourRad : 0
+	property int balance : 0
 
-    Item{
-		id : date
-		anchors.fill : parent
+	Item{
+	id : date
+	anchors.fill : parent
 
 		Text{
 			id : dateText
@@ -56,94 +56,94 @@ Item {
 		}
 	}
     
-    Canvas {
-        id:hourHandCanvas
+	Canvas {
+		id:hourHandCanvas
 		anchors.fill: parent
 		smooth: true
-        renderTarget: Canvas.FramebufferObject
+		renderTarget: Canvas.FramebufferObject
 		onPaint: {
 			var ctx = getContext('2d')
-            ctx.save()
-            ctx.clearRect(0, 0, parent.width, parent.height)
-            ctx.translate(parent.width/2, parent.height/2)
-            ctx.strokeStyle = '#ffffffff'
-            ctx.lineWidth = parent.width * .02
-            ctx.lineCap = 'round'
-            ctx.shadowColor = '#80000000'
+			ctx.save()
+			ctx.clearRect(0, 0, parent.width, parent.height)
+			ctx.translate(parent.width/2, parent.height/2)
+			ctx.strokeStyle = '#ffffffff'
+			ctx.lineWidth = parent.width * .02
+			ctx.lineCap = 'round'
+			ctx.shadowColor = '#80000000'
 			ctx.shadowOffsetX = parent.width * .025
 			ctx.shadowOffsetY = parent.width * .025
 			ctx.shadowBlur = parent.width * .025
-            ctx.rotate(hourRad)
-            ctx.beginPath()
-            ctx.moveTo(0, 0)
-            ctx.lineTo(0, -parent.width * .3)
-            ctx.stroke()
-            ctx.restore()
+			ctx.rotate(hourRad)
+			ctx.beginPath()
+			ctx.moveTo(0, 0)
+			ctx.lineTo(0, -parent.width * .3)
+			ctx.stroke()
+			ctx.restore()
 		}
 	}
-    Canvas {
-        id:minuteHandCanvas
+	Canvas {
+		id:minuteHandCanvas
 		anchors.fill: parent
 		smooth: true
-        renderTarget: Canvas.FramebufferObject
+		renderTarget: Canvas.FramebufferObject
 		onPaint: {
 			var ctx = getContext('2d')
-            ctx.save()
-            ctx.clearRect(0, 0, parent.width, parent.height)
-            ctx.translate(parent.width/2, parent.height/2)
-            ctx.strokeStyle = '#ffffffff'
-            ctx.lineWidth = parent.width * .02
-            ctx.lineCap = 'round'
-            ctx.shadowColor = '#80000000'
+			ctx.save()
+			ctx.clearRect(0, 0, parent.width, parent.height)
+			ctx.translate(parent.width/2, parent.height/2)
+			ctx.strokeStyle = '#ffffffff'
+			ctx.lineWidth = parent.width * .02
+			ctx.lineCap = 'round'
+			ctx.shadowColor = '#80000000'
 			ctx.shadowOffsetX = parent.width * .025
 			ctx.shadowOffsetY = parent.width * .025
 			ctx.shadowBlur = parent.width * .025
-            ctx.rotate(minuteRad)
-            ctx.beginPath()
-            ctx.moveTo(0, 0)
-            ctx.lineTo(0, -parent.width * .4)
-            ctx.stroke()
-            ctx.restore()
+			ctx.rotate(minuteRad)
+			ctx.beginPath()
+			ctx.moveTo(0, 0)
+			ctx.lineTo(0, -parent.width * .4)
+			ctx.stroke()
+			ctx.restore()
 		}
 	}
-    Canvas {
-        id:secondHandCanvas
+	Canvas {
+		id:secondHandCanvas
 		anchors.fill: parent
 		smooth: true
-        renderTarget: Canvas.FramebufferObject
+		renderTarget: Canvas.FramebufferObject
 		onPaint: {
 			var ctx = getContext('2d')
-            ctx.save()
-            ctx.clearRect(0, 0, parent.width, parent.height)
-            ctx.translate(parent.width/2, parent.height/2)
-            ctx.strokeStyle = '#ffff0000'
-            ctx.lineWidth = parent.width*.01
-            ctx.lineCap = 'round'
-            ctx.shadowColor = '#80000000'
+			ctx.save()
+			ctx.clearRect(0, 0, parent.width, parent.height)
+			ctx.translate(parent.width/2, parent.height/2)
+			ctx.strokeStyle = '#ffff0000'
+			ctx.lineWidth = parent.width*.01
+			ctx.lineCap = 'round'
+			ctx.shadowColor = '#80000000'
 			ctx.shadowOffsetX = parent.width * .0125
 			ctx.shadowOffsetY = parent.width * .0125
 			ctx.shadowBlur = parent.width * .0125
-            ctx.rotate(secondRad)
-            ctx.beginPath()
-            ctx.moveTo(0, 0)
-            ctx.lineTo(0, -parent.width*.4)
-            ctx.stroke()
-            ctx.restore()
+			ctx.rotate(secondRad)
+			ctx.beginPath()
+			ctx.moveTo(0, 0)
+			ctx.lineTo(0, -parent.width*.4)
+			ctx.stroke()
+			ctx.restore()
 		}
 	}
 
-    Connections {
-        target: wallClock
-        onTimeChanged: {
-            if (wallClock.time.getSeconds() !== balance){
-                balance = wallClock.time.getSeconds();
-                secondRad = (wallClock.time.getSeconds()) * (Math.PI / 30)
-                minuteRad = (wallClock.time.getMinutes()) * (Math.PI / 30) + (secondRad / 60)
-                hourRad = (wallClock.time.getHours()) * (Math.PI / 6) + (minuteRad / 60)
-                hourHandCanvas.requestPaint()
-                minuteHandCanvas.requestPaint()
-                secondHandCanvas.requestPaint()
-            }
-        }
-    }
+	Connections {
+		target: wallClock
+		onTimeChanged: {
+			if (wallClock.time.getSeconds() !== balance){
+				balance = wallClock.time.getSeconds();
+				secondRad = (wallClock.time.getSeconds()) * (Math.PI / 30)
+				minuteRad = (wallClock.time.getMinutes()) * (Math.PI / 30) + (secondRad / 60)
+				hourRad = (wallClock.time.getHours()) * (Math.PI / 6) + (minuteRad / 60)
+				hourHandCanvas.requestPaint()
+				minuteHandCanvas.requestPaint()
+				secondHandCanvas.requestPaint()
+			}
+		}
+	}
 }
