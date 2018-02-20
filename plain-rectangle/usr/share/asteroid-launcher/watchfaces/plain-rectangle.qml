@@ -21,36 +21,36 @@ import QtQuick 2.1
 //import QtGraphicalEffects 1.0
 
 Item {
-	  property bool animationEnabled : true
+	property bool animationEnabled : true
 
 // Block for local Testing
-//    width : 400
-//    height : 400
-//    property var wallClock : {time : new Date()}
-//    Timer {
-//        interval: 100; running: true; repeat: true;
-//        onTriggered: {
-//            wallClock.time = new Date()
-//        }
-//    }
+//	width : 400
+//	height : 400
+//	property var wallClock : {time : new Date()}
+//	Timer {
+//		interval: 100; running: true; repeat: true;
+//		onTriggered: {
+//			wallClock.time = new Date()
+//		}
+//	}
 
 	Timer {
 		id : animationDelayTimer
-        interval: 10; running: false; repeat: false;
-        onTriggered: {
-            animationEnabled = true
-        }
-    }
+		interval: 10; running: false; repeat: false;
+		onTriggered: {
+			animationEnabled = true
+		}
+	}
 
-    Item{
-        id : face
-        anchors.fill : parent
-        Rectangle{
-            anchors.fill : parent
-            color:'#00ffffff'
-            radius: width / 2
-        }
-    }
+	Item{
+		id : face
+		anchors.fill : parent
+		Rectangle{
+			anchors.fill : parent
+			color:'#00ffffff'
+			radius: width / 2
+		}
+	}
 
 	Item{
 		id : date
@@ -72,111 +72,111 @@ Item {
 		}
 	}
 
-    Item{
-        id : hands
-        anchors.fill : parent
+	Item{
+		id : hands
+		anchors.fill : parent
 
-        Rectangle{
-            id: hourHand
+		Rectangle{
+			id: hourHand
 
-            width: parent.width * .02
-            height: parent.height * .3
+			width: parent.width * .02
+			height: parent.height * .3
 
-            color:"#ffffffff"
-            border.color:'#cccccccc'
-            border.width: 1
-            radius:width / 2
-            antialiasing : true
-            x: ( parent.width - width ) / 2
-            y: ( parent.height - height ) / 2
-            transform: [
-                Translate {
-                    y : -( hourHand.height - hourHand.width ) / 2
-                } ,
-                Rotation {
-                    id: hourHandRotation
-                    origin.x: hourHand.width/2
-                    origin.y: hourHand.height/2
-                    angle: ( ( wallClock.time.getHours() * 30 ) + ( wallClock.time.getMinutes() * .5 ) )
-                }
-            ]
-        }
+			color:"#ffffffff"
+			border.color:'#cccccccc'
+			border.width: 1
+			radius:width / 2
+			antialiasing : true
+			x: ( parent.width - width ) / 2
+			y: ( parent.height - height ) / 2
+			transform: [
+				Translate {
+					y : -( hourHand.height - hourHand.width ) / 2
+				} ,
+				Rotation {
+					id: hourHandRotation
+					origin.x: hourHand.width/2
+					origin.y: hourHand.height/2
+					angle: ( ( wallClock.time.getHours() * 30 ) + ( wallClock.time.getMinutes() * .5 ) )
+				}
+			]
+		}
 
-        Rectangle{
-            id: minuteHand
+		Rectangle{
+			id: minuteHand
 
-            width: parent.width * .02
-            height: parent.height * .4
+			width: parent.width * .02
+			height: parent.height * .4
 
-            color:"#ffffffff"
-            border.color:'#cccccccc'
-            border.width: 1
-            radius:width / 2
-            antialiasing : true
-            x: ( parent.width - width ) / 2
-            y: ( parent.height - height ) / 2
-            transform: [
-                Translate {
-                    y : -( minuteHand.height - minuteHand.width ) / 2
-                } ,
-                Rotation {
-                    id: minuteHandRotation
-                    origin.x: minuteHand.width/2
-                    origin.y: minuteHand.height/2
-                    angle: ( ( wallClock.time.getMinutes() * 6 ) + ( wallClock.time.getSeconds() * .1 ) )
-                    Behavior on angle {
+			color:"#ffffffff"
+			border.color:'#cccccccc'
+			border.width: 1
+			radius:width / 2
+			antialiasing : true
+			x: ( parent.width - width ) / 2
+			y: ( parent.height - height ) / 2
+			transform: [
+				Translate {
+					y : -( minuteHand.height - minuteHand.width ) / 2
+				} ,
+				Rotation {
+					id: minuteHandRotation
+					origin.x: minuteHand.width/2
+					origin.y: minuteHand.height/2
+					angle: ( ( wallClock.time.getMinutes() * 6 ) + ( wallClock.time.getSeconds() * .1 ) )
+					Behavior on angle {
 						enabled : animationEnabled
-                        SpringAnimation { spring: 1; damping: 0.1; modulus: 360 }
-                    }
-                }
-            ]
-        }
+						SpringAnimation { spring: 1; damping: 0.1; modulus: 360 }
+					}
+				}
+			]
+		}
 
-        Rectangle{
-            id: secondHand
+		Rectangle{
+			id: secondHand
 
-            width: parent.width * .01
-            height: parent.height * .4
+			width: parent.width * .01
+			height: parent.height * .4
 
-            color:"#ffcc4400"
-            border.color:'#cccc4400'
-            border.width: 1
-            radius:width / 2
-            antialiasing : true
-            x: ( parent.width - width ) / 2
-            y: ( parent.height - height ) / 2
-            transform: [
-                Translate {
-                    y : -( secondHand.height - secondHand.width ) / 2
-                } ,
-                Rotation {
-                    id: secondHandRotation
-                    origin.x: secondHand.width/2
-                    origin.y: secondHand.height/2
-                    angle: (wallClock.time.getSeconds() * 6)
-                    Behavior on angle {
+			color:"#ffcc4400"
+			border.color:'#cccc4400'
+			border.width: 1
+			radius:width / 2
+			antialiasing : true
+			x: ( parent.width - width ) / 2
+			y: ( parent.height - height ) / 2
+			transform: [
+				Translate {
+					y : -( secondHand.height - secondHand.width ) / 2
+				} ,
+				Rotation {
+					id: secondHandRotation
+					origin.x: secondHand.width/2
+					origin.y: secondHand.height/2
+					angle: (wallClock.time.getSeconds() * 6)
+					Behavior on angle {
 						enabled : animationEnabled
-                        SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
-                    }
-                }
-            ]
-        }
- //       layer.enabled: true
- //       layer.effect: DropShadow {
- //           transparentBorder: true
- //           color:'#aa000000'
- //           horizontalOffset: 5
- //           verticalOffset: 5
- //       }
-    }
+						SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
+					}
+				}
+			]
+		}
+//		layer.enabled: true
+//		layer.effect: DropShadow {
+//			transparentBorder: true
+//			color:'#aa000000'
+//			horizontalOffset: 5
+//			verticalOffset: 5
+//		}
+	}
 	Connections {
-        target: wallClock
-        onEnabledChanged:{
+		target: wallClock
+		onEnabledChanged:{
 			if (wallClock.enabled){
 				animationDelayTimer.start()
 			}else{
 				animationEnabled = false;
 			}
 		}
-    }
+	}
 }
