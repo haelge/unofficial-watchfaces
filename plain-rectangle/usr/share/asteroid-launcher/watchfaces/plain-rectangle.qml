@@ -24,15 +24,16 @@ Item {
 	property bool animationEnabled : true
 
 // Block for local Testing
-//	width : 400
-//	height : 400
-//	property var wallClock : {time : new Date()}
-//	Timer {
-//		interval: 100; running: true; repeat: true;
-//		onTriggered: {
-//			wallClock.time = new Date()
-//		}
-//	}
+id : wallClock
+width : 400
+height : 400
+property var time : new Date()
+Timer {
+	interval: 100; running: true; repeat: true;
+	onTriggered: {
+		wallClock.time = new Date()
+	}
+}
 
 	Timer {
 		id : animationDelayTimer
