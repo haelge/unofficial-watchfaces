@@ -23,17 +23,17 @@ import QtQuick 2.1
 Item {
 	property bool animationEnabled : true
 
-// Block for local Testing
-id : wallClock
-width : 400
-height : 400
-property var time : new Date()
-Timer {
-	interval: 100; running: true; repeat: true;
-	onTriggered: {
-		wallClock.time = new Date()
-	}
-}
+/* Block for local Testing*/
+/*	id : wallClock
+	width : 400
+	height : 400
+	property var time : new Date()
+	Timer {
+		interval: 100; running: true; repeat: true;
+		onTriggered: {
+			wallClock.time = new Date()
+		}
+	} */
 
 	Timer {
 		id : animationDelayTimer
@@ -162,13 +162,14 @@ Timer {
 				}
 			]
 		}
-//		layer.enabled: true
-//		layer.effect: DropShadow {
-//			transparentBorder: true
-//			color:'#aa000000'
-//			horizontalOffset: 5
-//			verticalOffset: 5
-//		}
+/* 
+/*		layer.enabled: true
+		layer.effect: DropShadow {
+			transparentBorder: true
+			color:'#aa000000'
+			horizontalOffset: 5
+			verticalOffset: 5
+		}*/
 	}
 	Connections {
 		target: wallClock
