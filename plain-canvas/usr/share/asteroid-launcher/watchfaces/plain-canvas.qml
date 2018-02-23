@@ -34,7 +34,57 @@ Item {
 	property real secondRad : 0
 	property real minuteRad : 0
 	property real hourRad : 0
-	property int balance : 0
+
+    // Block for local Testing
+    id : wallClock
+    width : 400
+    height : 400
+    property var time : new Date()
+    Timer {
+    	interval: 100; running: true; repeat: true;
+    	onTriggered: {
+    		wallClock.time = new Date()
+    	}
+    }
+	property int seconds: wallClock.time.getSeconds()
+
+	states: [State { when: seconds % 2 == 0; PropertyChanges { secondAngle: seconds * 6; target: secondHandCanvas }},
+			State { when: seconds % 2 == 1; PropertyChanges { secondAngle: seconds * 6; target: secondHandCanvas }}  ]
+
+	transitions: Transition {
+		RotationAnimation {
+			property: "secondAngle"
+			direction: RotationAnimation.Clockwise
+			easing.type: Easing.OutBack
+			duration: 200
+		}
+	}
+	property int minutes: wallClock.time.getMinutes()
+
+	states: [State { when: seconds % 2 == 0; PropertyChanges { minutesAngle: minutes * 6 + seconds * .1; target: secondHandCanvas }},
+			State { when: seconds % 2 == 1; PropertyChanges { minutesAngle: minutes * 6 + seconds * .1; target: secondHandCanvas }}  ]
+
+	transitions: Transition {
+		RotationAnimation {
+			property: "minuteAngle"
+			direction: RotationAnimation.Clockwise
+			easing.type: Easing.OutBack
+			duration: 200
+		}
+	}
+	property int hours: wallClock.time.getHours()
+
+	states: [State { when: minutes % 2 == 0; PropertyChanges { hoursAngle: hours * 30 + minutes * .5; target: secondHandCanvas }},
+			State { when: minutes % 2 == 1; PropertyChanges { hoursAngle: hours * 30 + minutes * .5; target: secondHandCanvas }}  ]
+
+	transitions: Transition {
+		RotationAnimation {
+			property: "hourAngle"
+			direction: RotationAnimation.Clockwise
+			easing.type: Easing.OutBack
+			duration: 200
+		}
+	}
 
 	Item{
 	id : date
@@ -55,7 +105,7 @@ Item {
 			text: Qt.formatDate(wallClock.time, "<b>ddd</b> d MMM")
 		}
 	}
-    
+
 	Canvas {
 		id:hourHandCanvas
 		anchors.fill: parent
@@ -70,9 +120,9 @@ Item {
 			ctx.lineWidth = parent.width * .02
 			ctx.lineCap = 'round'
 			ctx.shadowColor = '#80000000'
-			ctx.shadowOffsetX = parent.width * .025
-			ctx.shadowOffsetY = parent.width * .025
-			ctx.shadowBlur = parent.width * .025
+			ctx.shadowOffsetX = Math.cos(hourRad) * parent.width * .0125
+			ctx.shadowOffsetY = Math.cos(hourRad) * parent.width * .0125
+			ctx.shadowBlur = parent.width * .005
 			ctx.rotate(hourRad)
 			ctx.beginPath()
 			ctx.moveTo(0, 0)
@@ -84,8 +134,12 @@ Item {
 	Canvas {
 		id:minuteHandCanvas
 		anchors.fill: parent
-		smooth: true
+		property real minuteAngle: seconds * 6;
+		onMinuteAngleChanged: requestPaint()
+
 		renderTarget: Canvas.FramebufferObject
+		renderStrategy: Canvas.Cooperative
+		smooth: true
 		onPaint: {
 			var ctx = getContext('2d')
 			ctx.save()
@@ -95,10 +149,10 @@ Item {
 			ctx.lineWidth = parent.width * .02
 			ctx.lineCap = 'round'
 			ctx.shadowColor = '#80000000'
-			ctx.shadowOffsetX = parent.width * .025
-			ctx.shadowOffsetY = parent.width * .025
-			ctx.shadowBlur = parent.width * .025
-			ctx.rotate(minuteRad)
+            ctx.shadowOffsetX = Math.cos( minuteAngle * Math.PI / 180 ) * parent.width * .0125
+			ctx.shadowOffsetY = Math.cos( minuteAngle * Math.PI / 180 ) * parent.width * .0125
+			ctx.shadowBlur = parent.width * .005
+			ctx.rotate( minuteAngle * Math.PI / 180 )
 			ctx.beginPath()
 			ctx.moveTo(0, 0)
 			ctx.lineTo(0, -parent.width * .4)
@@ -108,11 +162,18 @@ Item {
 	}
 	Canvas {
 		id:secondHandCanvas
-		anchors.fill: parent
-		smooth: true
+		anchors.fill:parent;
+
+		property real secondAngle: seconds * 6;
+		onSecondAngleChanged: requestPaint()
+
 		renderTarget: Canvas.FramebufferObject
+		renderStrategy: Canvas.Cooperative
+		smooth: true
+
 		onPaint: {
 			var ctx = getContext('2d')
+			//ctx.resetTransform()
 			ctx.save()
 			ctx.clearRect(0, 0, parent.width, parent.height)
 			ctx.translate(parent.width/2, parent.height/2)
@@ -120,30 +181,29 @@ Item {
 			ctx.lineWidth = parent.width*.01
 			ctx.lineCap = 'round'
 			ctx.shadowColor = '#80000000'
-			ctx.shadowOffsetX = parent.width * .0125
-			ctx.shadowOffsetY = parent.width * .0125
-			ctx.shadowBlur = parent.width * .0125
-			ctx.rotate(secondRad)
+            ctx.shadowOffsetX = Math.cos(secondAngle * Math.PI/180 ) * parent.width * .0125
+			ctx.shadowOffsetY = Math.cos(secondAngle * Math.PI/180) * parent.width * .0125
+			ctx.shadowBlur = parent.width * .005
+			ctx.rotate(secondAngle * Math.PI/180)
 			ctx.beginPath()
 			ctx.moveTo(0, 0)
 			ctx.lineTo(0, -parent.width*.4)
 			ctx.stroke()
 			ctx.restore()
 		}
+		//Timer { repeat: true; running: true; onTriggered: secondHandCanvas.seconds = new Date().getSeconds()  }
+
 	}
 
-	Connections {
-		target: wallClock
-		onTimeChanged: {
-			if (wallClock.time.getSeconds() !== balance){
-				balance = wallClock.time.getSeconds();
-				secondRad = (wallClock.time.getSeconds()) * (Math.PI / 30)
-				minuteRad = (wallClock.time.getMinutes()) * (Math.PI / 30) + (secondRad / 60)
-				hourRad = (wallClock.time.getHours()) * (Math.PI / 6) + (minuteRad / 60)
-				hourHandCanvas.requestPaint()
-				minuteHandCanvas.requestPaint()
-				secondHandCanvas.requestPaint()
-			}
-		}
-	}
+//	Connections {
+//		target: wallClock
+//		onTimeChanged: {
+//			//secondHandCanvas.seconds = wallClock.time.getSeconds()
+//			minuteRad = wallClock.time.getMinutes() / 30 * Math.PI + secondRad / 60
+//			hourRad = wallClock.time.getHours() / 6 * Math.PI + minuteRad / 60
+//			hourHandCanvas.requestPaint()
+//			minuteHandCanvas.requestPaint()
+//			//secondHandCanvas.requestPaint()
+//		}
+//	}
 }
